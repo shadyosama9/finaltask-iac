@@ -1,0 +1,48 @@
+# Terraform state files
+*.tfstate
+*.tfstate.backup
+*.tfstate.*.backup
+*.tfstate.lock.info
+
+# Terraform cache directories
+**/.terraform/
+
+# Terragrunt cache
+**/.terragrunt-cache/
+
+# Ignore plan files
+*.tfplan
+
+# CLI configuration files
+.terraformrc
+terraform.rc
+
+# Auto-generated override files
+*.auto.tfvars
+*.tfvars
+*.tfvars.json
+*_override.tf
+*_override.tf.json
+override.tf
+override.tf.json
+
+# Log and crash files
+crash.log
+crash.*.log
+
+# OS-specific and editor junk
+.DS_Store
+*.pem
+*.pfx
+*.key
+.vscode/
+.idea/
+*.iml
+
+# Optional: Ignore sensitive environment files
+.envrc
+env.key
+
+# Optional: Ignore build artifacts
+build/
+out/
