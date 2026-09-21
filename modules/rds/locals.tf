@@ -8,25 +8,15 @@ locals {
     }
   }
 
-  rds_cloudwatch_log_groups = {
-    for pair in concat(
-      flatten([
-        for k, v in var.rds : [
-          for export in v.enabled_cloudwatch_logs_exports : {
-            identifier = v.identifier
-            export     = export
-          }
-        ]
-      ]),
-      flatten([
-        for k, v in var.rds_replicas : [
-          for export in v.enabled_cloudwatch_logs_exports : {
-            identifier = v.identifier
-            export     = export
-          }
-        ]
-      ])
-    ) : "${pair.identifier}/${pair.export}" => pair
-  }
+  rds_log_groups = merge([
+    for rds_key, rds_val in var.rds : {
+      for log_type in rds_val.enabled_cloudwatch_logs_exports :
+      "${rds_key}/${log_type}" => {
+        name              = "/aws/rds/instance/${rds_val.identifier}/${log_type}"
+        retention_in_days = rds_val.cloudwatch_logs_retention_days
+      }
+    }
+    if length(rds_val.enabled_cloudwatch_logs_exports) > 0
+  ]...)
 }
 
