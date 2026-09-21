@@ -58,8 +58,8 @@ inputs = {
       # ─── OIDC Trust Configuration ─────────────────────────────────────
       oidc_provider_key = "github"            # required (string)
       audience          = "sts.amazonaws.com" # required (string)
-      subjects = [                            # required (list(string))
-        "repo:shadyosama9/vue3-realworld-example-app:ref:refs/heads/main",
+      subjects = [
+        "repo:shadyosama9@113646884/realworld-flask@1375628475:environment:production",
       ]
 
       # ─── Inline Policies ──────────────────────────────────────────────
