@@ -50,9 +50,9 @@ inputs = {
       load_balancer_type         = "application"
       enable_deletion_protection = false
       security_groups            = [dependency.sg.outputs.security_group_ids["load_balancer"]]
-      subnets                    = [
-        dependency.vpc.outputs.public_subnet_ids["pub_sub_1"],
-        dependency.vpc.outputs.public_subnet_ids["pub_sub_2"]
+      subnets = [
+        dependency.vpc.outputs.public_subnet_ids["pub-sub-1"],
+        dependency.vpc.outputs.public_subnet_ids["pub-sub-2"]
       ]
       tags = {
         Name = "shady-osama-backend-alb"
