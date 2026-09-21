@@ -1,5 +1,31 @@
-variable "env" {
-  type = string
+variable "keys" {
+  description = "Map of KMS key configurations"
+  type = map(object({
+    # (Required) The display name/alias for the KMS key.
+    name = string
+
+    # (Optional) The AWS region where the key will be created. Defaults to "us-east-1".
+    region = optional(string, "us-east-1")
+
+    # (Required) A description of the key's purpose.
+    description = string
+
+    # (Required) The number of days before key deletion (7–30).
+    deletion_window_in_days = number
+
+    # (Required) Whether automatic key rotation is enabled.
+    enable_key_rotation = bool
+
+    # (Optional) The type of key material (e.g., SYMMETRIC_DEFAULT). Defaults to "SYMMETRIC_DEFAULT".
+    customer_master_key_spec = optional(string, "SYMMETRIC_DEFAULT")
+
+    # (Optional) A key policy document in JSON format. Defaults to null.
+    policy = optional(string, null)
+
+    # (Optional) The rotation period in days (between 90 and 2560). Defaults to null.
+    rotation_period_in_days = optional(number, null)
+  }))
+  default = {}
 }
 
 variable "project" {
@@ -7,18 +33,13 @@ variable "project" {
   type        = string
 }
 
-variable "tags" {
-  type = map(any)
+variable "env" {
+  description = "Environment name"
+  type        = string
 }
 
-variable "keys" {
-  description = "Map of KMS keys to create, keyed by logical name"
-  type = map(object({
-    description             = string
-    policy                  = string
-    region                  = optional(string, "us-east-1")
-    deletion_window_in_days = optional(number, 30)
-    enable_key_rotation     = optional(bool, true)
-    alias                   = optional(string)
-  }))
+variable "tags" {
+  description = "Additional tags for resources"
+  type        = map(string)
+  default     = {}
 }
