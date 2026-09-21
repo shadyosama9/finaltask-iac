@@ -45,6 +45,7 @@ dependency "sg" {
     }
   }
 }
+
 dependency "load_balancer" {
   config_path = "../load-balancer"
   mock_outputs = {
@@ -52,6 +53,14 @@ dependency "load_balancer" {
       tg = "arn:aws:elasticloadbalancing:us-east-1:123456789012:targetgroup/mock-tg/123"
     }
   }
+}
+
+dependency "rds" {
+  config_path = "../rds"
+}
+
+dependency "secrets_manager" {
+  config_path = "../secrets_manager"
 }
 
 inputs = {
@@ -89,6 +98,39 @@ inputs = {
           container_port = 5000
           host_port      = 5000
         }]
+
+        secrets = [ # optional (list(object), default: [])
+          {
+            name       = "FLASK_APP"                                                               # required (string) — env var name inside the container
+            value_from = "${dependency.secrets_manager.outputs.secret_arn["backend"]}:FLASK_APP::" # required (string) — Secrets Manager secret ARN
+          },
+          {
+            name       = "FLASK_ENV"                                                               # required (string) — env var name inside the container
+            value_from = "${dependency.secrets_manager.outputs.secret_arn["backend"]}:FLASK_ENV::" # required (string) — Secrets Manager secret ARN
+          },
+          {
+            name       = "FLASK_RUN_PORT"                                                               # required (string) — env var name inside the container
+            value_from = "${dependency.secrets_manager.outputs.secret_arn["backend"]}:FLASK_RUN_PORT::" # required (string) — Secrets Manager secret ARN
+          },
+          {
+            name       = "POSTGRES_HOST"                                                               # required (string) — env var name inside the container
+            value_from = "${dependency.secrets_manager.outputs.secret_arn["backend"]}:POSTGRES_HOST::" # required (string) — Secrets Manager secret ARN
+          },
+          {
+            name       = "POSTGRES_DB"                                                               # required (string) — env var name inside the container
+            value_from = "${dependency.secrets_manager.outputs.secret_arn["backend"]}:POSTGRES_DB::" # required (string) — Secrets Manager secret ARN
+          },
+          {
+            name       = "POSTGRES_PASSWORD"                                                      # required (string) — env var name inside the container
+            value_from = "${dependency.rds.outputs.rds_master_secret_arns["postgres"]}:password::" # required (string) — Secrets Manager secret ARN
+          },
+          {
+            name       = "POSTGRES_USER"                                                          # required (string) — env var name inside the container
+            value_from = "${dependency.rds.outputs.rds_master_secret_arns["postgres"]}:username::" # required (string) — Secrets Manager secret ARN
+          }
+
+        ]
+
         log_configuration = {
           log_driver = "awslogs"
           options = {
@@ -111,8 +153,8 @@ inputs = {
       network_configuration = [{
         assign_public_ip = false
         subnet_ids = [
-          dependency.vpc.outputs.private_subnet_ids["priv_sub_1"],
-          dependency.vpc.outputs.private_subnet_ids["priv_sub_2"]
+          dependency.vpc.outputs.private_subnet_ids["cluster-sub-1"],
+          dependency.vpc.outputs.private_subnet_ids["cluster-sub-2"]
         ]
         security_group_ids = [dependency.sg.outputs.security_group_ids["ecs"]]
       }]
