@@ -43,7 +43,7 @@ inputs = {
 
   dashboards = {
     rds = {
-      dashboard_name = "${include.project.locals.project}-${include.env.locals.env}-rds"
+      dashboard_name = "shady-osama-${include.project.locals.project}-${include.env.locals.env}-rds"
 
       dashboard_body = jsonencode({
         widgets = [
@@ -148,7 +148,7 @@ inputs = {
     }
 
     ecs = {
-      dashboard_name = "${include.project.locals.project}-${include.env.locals.env}-ecs"
+      dashboard_name = "shady-osama-${include.project.locals.project}-${include.env.locals.env}-ecs"
 
       dashboard_body = jsonencode({
         widgets = [
@@ -209,7 +209,7 @@ inputs = {
     }
 
     load-balancer = {
-      dashboard_name = "${include.project.locals.project}-${include.env.locals.env}-load-balancer"
+      dashboard_name = "shady-osama-${include.project.locals.project}-${include.env.locals.env}-load-balancer"
 
       dashboard_body = jsonencode({
         widgets = [
