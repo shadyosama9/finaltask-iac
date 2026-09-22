@@ -4,7 +4,7 @@ locals {
 
   tags = {
     env        = local.env
-    project    = local.env
+    project    = local.project
     tf-managed = true
   }
 }
