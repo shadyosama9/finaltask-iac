@@ -35,3 +35,8 @@ output "rds_master_secret_arns" {
   description = "RDS master user Secrets Manager ARNs"
   value       = { for key, rds in aws_db_instance.main : key => rds.master_user_secret[0].secret_arn }
 }
+
+output "db_identifiers" {
+  description = "RDS DB instance identifiers"
+  value = { for key, rds in aws_db_instance.main : key => rds.identifier }
+}

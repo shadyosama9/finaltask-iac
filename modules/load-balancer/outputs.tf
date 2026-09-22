@@ -12,6 +12,11 @@ output "load_balancer_dns_names" {
   }
 }
 
+output "load_balancer_arn_suffixes" {
+  description = "Load balancer ARN suffixes for CloudWatch dimensions"
+  value = { for key, load_balancer in aws_lb.this : key => load_balancer.arn_suffix }
+}
+
 output "target_group_arns" {
   value = {
     for name, target_group in aws_lb_target_group.this :
