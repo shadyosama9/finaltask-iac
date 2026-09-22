@@ -4,7 +4,7 @@ locals {
 
   tags = {
     env        = local.env
-    project    = "final-task"
+    project    = local.env
     tf-managed = true
   }
 }
